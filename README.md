@@ -54,7 +54,7 @@ pip install
 文本标签库在格式上与Kinco Dtools存在巨大差异，最为棘手，成为首要解决对象。在日后可能考虑更新版本增加对
 事件信息的转换，或其他第三方数据库转换至Kinco Dtools标准的支持。
 
-任何疑问或建议，请联系baozl@kinco.com，Kinco企业内部伙伴可通过企业微信搜索baozl找到我。
+任何疑问或建议，请联系 baozl@kinco.com，Kinco企业内部伙伴可通过企业微信搜索 baozl 找到我。
 <br>在GitHub上可以找到最新版本与更加详细的信息：
 <br>https://github.com/Eddie1206/typeCast
 
