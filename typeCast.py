@@ -1,4 +1,5 @@
-#Kinco Inc. All rights reserved.
+# MIT License
+# Copyright (c) 2023 Kinco Inc.
 #Created by Eddie 包 at Kinco on September 18, 2023
 
 import pandas as pd
