@@ -55,8 +55,8 @@ pip install
 事件信息的转换，或其他第三方数据库转换至Kinco Dtools标准的支持。
 
 任何疑问或建议，请联系baozl@kinco.com，Kinco企业内部伙伴可通过企业微信搜索baozl找到我。
-在GitHub上可以找到最新版本与更加详细的信息：
-https://github.com/Eddie1206/typeCast
+<br>在GitHub上可以找到最新版本与更加详细的信息：
+<br>https://github.com/Eddie1206/typeCast
 
 本项目采用MIT License。这意味着您可以自由地使用、修改和分发本项目的代码，但需注意应遵循许可证条件，
 并在文件中包含来自Kinco Inc.的版权声明。
