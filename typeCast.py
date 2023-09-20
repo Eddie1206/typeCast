@@ -1,5 +1,4 @@
-# MIT License
-# Copyright (c) 2023 Kinco Inc.
+#Kinco Inc. All rights reserved.
 #Created by Eddie 包 at Kinco on September 18, 2023
 
 import pandas as pd
@@ -8,19 +7,36 @@ import pyexcel_io.writers
 import pyexcel_xls
 import os
 #import xlrd
-#import部分可根据实际使用环境调整，部分引入为pyinstaller打包时所需，在直接执行.py时不必要
+
+#C:\Users\EDDIE\Desktop\typeCast\origin.xls
+#C:\Users\EDDIE\Desktop\typeCast\output.xls
 
 print("------------------------------------------------")
 print("Welcome to Kinco Format Converter!")
 print("Copyright © 2023 Kinco, Inc.")
 print("------------------------------------------------")
 
-#使用while循环读取参数，直至参数格式正确break
 while True:
     input_path = input("请输入源 Excel 文件路径：")
     _, ext = os.path.splitext(input_path)
     if ext.lower() == '.xls':
-        break
+        try:
+            df = pd.read_excel(input_path, engine="xlrd", keep_default_na=False, na_values=[''])
+            # 检查前三列的列名是否与期望的文本匹配
+            headerChecker = ["文字标签名称", "Language 1, 状态 0", "Language 2, 状态 0"]
+            if list(df.columns[:3]) == headerChecker:
+                # 如果匹配，跳出循环
+                break
+            else:
+                print("输入文件非标准weinview文本库格式，无法转换")
+        except FileNotFoundError:
+            print("文件不存在，请重新输入")
+        except PermissionError:
+            print("无权限访问文件，请重新输入")
+        except IOError as e:
+            print(f"读取文件时发生错误: {e}")
+        except Exception as e:
+            print(f"读取文件时发生异常: {e}")
     elif ext.lower() == '.xlsx':
         print("目前仅支持 .xls 格式文件。")
     else:
@@ -29,6 +45,10 @@ while True:
 while True:
     output_path = input("请输入终 Excel 文件路径：")
     _, ext = os.path.splitext(output_path)
+    if os.path.isabs(output_path):
+        confirm = input("警告：识别到绝对路径，确认要使用此路径吗？(yes/no): ")
+        if confirm.lower() != 'yes':
+            continue
     if ext.lower() == '.xls':
         break
     elif ext.lower() == '.xlsx':
@@ -36,7 +56,6 @@ while True:
     else:
         print("错误：无效的文件格式。")
 
-#最大语言和状态的输入可缺省，读入空字符串时直接采用默认值
 while True:
     num_languages = input("请输入语言数量（默认为 8）：")
     if num_languages == '':
@@ -59,12 +78,9 @@ while True:
     else:
         print("错误：请输入一个大于0的整数。")
 
-#文件读入df, 转换后数据首先以数组data保存，language_non_empty标记已使用的语言列
-df = pd.read_excel(input_path, engine="xlrd", keep_default_na=False, na_values=[''])
 data = []
 language_non_empty = [False] * num_languages
 
-#格式重排版
 for _, row in df.iterrows():
     label = row['文字标签名称']
     for state in range(num_states):
@@ -81,20 +97,16 @@ for _, row in df.iterrows():
             data.append(state_data)
         label = ''
 
-#添加Kinco表头，随后保存为dataFrame
 data.insert(0, ['文本库标签名', '状态'] + [f'Language {i}' for i in range(1, num_languages + 1)])
 data.insert(0, ['Text Lib', 'V200'] + ['' for _ in range(1, num_languages + 1)])
 columns = ['文本库标签名', '状态'] + [f'Language{i}' for i in range(1, num_languages + 1)]
 new_df = pd.DataFrame(data, columns=columns)
 
-#丢弃空语言列
 for i, is_non_empty in enumerate(language_non_empty, start=1):
     if not is_non_empty:
         col_to_drop = f"Language{i}"
         new_df.drop(columns=[col_to_drop], inplace=True)
 
-#空字符串填充NaN随后存储，使用pyexcel写入文件
-#由于pandas在最新版本中取消了对xlwt的支持，因此在写入方式上采用了与读取方式不同的技术
 new_df.fillna('', inplace=True)
 sheet = Sheet(new_df.values.tolist())
 sheet.save_as(output_path)
@@ -103,5 +115,4 @@ print("------------------------------------------------")
 print(f"转换完成！输出文件已保存到: {output_path}")
 print("------------------------------------------------")
 
-#暂锁界面以便用户看到成功提示
 os.system("pause")
