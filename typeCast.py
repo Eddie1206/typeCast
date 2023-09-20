@@ -8,9 +8,6 @@ import pyexcel_xls
 import os
 #import xlrd
 
-#C:\Users\EDDIE\Desktop\typeCast\origin.xls
-#C:\Users\EDDIE\Desktop\typeCast\output.xls
-
 print("------------------------------------------------")
 print("Welcome to Kinco Format Converter!")
 print("Copyright © 2023 Kinco, Inc.")
